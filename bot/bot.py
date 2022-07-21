@@ -20,12 +20,14 @@ logging.basicConfig(level=logging.INFO)
 # Initialize bot and dispatcher
 bot = Bot(token=API_TOKEN)
 storage = MongoStorage(
-    host='localhost',
+    host='mongoservice',
     port='27017',
+    username='root',
+    password='example'
 )
 dp = Dispatcher(bot, storage=storage)
 ym = YaManager()
-tracks_db: pymongo.collection.Collection = MongoClient('mongodb://localhost:27017').tracks_db.tracks
+tracks_db: pymongo.collection.Collection = MongoClient('mongodb://root:example@mongoservice:27017/').tracks_db.tracks
 
 auth_cb = CallbackData('auth', 'id', 'action')
 

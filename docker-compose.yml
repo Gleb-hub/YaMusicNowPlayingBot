@@ -1,0 +1,40 @@
+services:
+  bot_service:
+    image: "bot:local"
+    container_name: ya_music_bot
+    volumes:
+      - ./bot:/app
+    env_file: ./.env.local
+    command: ["python3", "bot.py"]
+    #command: ["ls", "-lA"]
+    logging:
+      options:
+        max-file: "10"
+        max-size: 2m
+    depends_on:
+      - mongoservice
+
+  mongoservice:
+    image: mongo
+    volumes:
+     - ./mongo/backup:/root/dump
+    env_file: ./.env.local
+    restart: always
+    logging:
+      options:
+        max-file: "2"
+        max-size: 2m
+
+  mongo-express:
+    image: mongo-express
+    #container_name: mongo-express
+    restart: always
+    ports:
+      - 8082:8081
+    depends_on:
+      - mongoservice
+    env_file: ./.env.local
+    logging:
+      options:
+        max-file: "2"
+        max-size: 2m
